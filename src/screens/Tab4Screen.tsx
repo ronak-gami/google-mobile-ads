@@ -1,18 +1,15 @@
 import React from 'react';
-import Container from '../components/Container';
+import AnimatedContainer from '../components/AnimatedContainer';
 import Text from '../components/Text';
 import { COLORS } from '../utils/colors';
 
 const Tab4Screen = () => {
   return (
-    <Container bgColor={COLORS.dark[800]}>
+    <AnimatedContainer bgColor={COLORS.dark[900]}>
       <Text size={24} bold color={COLORS.green[500]}>
         Tab-4
       </Text>
-      <Text size={16} color={COLORS.dark[300]} style={{ marginTop: 10 }}>
-        Welcome to Tab 4
-      </Text>
-    </Container>
+    </AnimatedContainer>
   );
 };
 

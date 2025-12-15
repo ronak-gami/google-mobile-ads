@@ -29,9 +29,7 @@ const AnimatedContainer: React.FC<AnimatedContainerProps> = ({
         {
           flex: 1,
           backgroundColor: bgColor,
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: 20,
+          paddingVertical: 20,
         },
         animatedStyle,
         style,

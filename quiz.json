@@ -1,0 +1,381 @@
+[
+  {
+    "id": 1,
+    "category": "Games",
+    "question": "Which company developed the game PUBG?",
+    "options": ["Epic Games", "Rockstar Games", "Krafton", "Ubisoft"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 2,
+    "category": "Games",
+    "question": "Which game series features the character Mario?",
+    "options": ["Zelda", "Metroid", "Mario", "Donkey Kong"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 3,
+    "category": "Games",
+    "question": "Which game is known as a MOBA?",
+    "options": ["FIFA", "Call of Duty", "League of Legends", "GTA V"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 4,
+    "category": "Games",
+    "question": "Which company owns PlayStation?",
+    "options": ["Microsoft", "Sony", "Nintendo", "Valve"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 5,
+    "category": "Games",
+    "question": "In which game do players build using blocks?",
+    "options": ["Roblox", "Minecraft", "Fortnite", "Terraria"],
+    "correctAnswerIndex": 1
+  },
+
+  {
+    "id": 6,
+    "category": "General Knowledge",
+    "question": "What is the capital of India?",
+    "options": ["Mumbai", "New Delhi", "Chennai", "Kolkata"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 7,
+    "category": "General Knowledge",
+    "question": "Which planet is closest to the Sun?",
+    "options": ["Venus", "Earth", "Mercury", "Mars"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 8,
+    "category": "General Knowledge",
+    "question": "Who invented the telephone?",
+    "options": [
+      "Thomas Edison",
+      "Alexander Graham Bell",
+      "Nikola Tesla",
+      "Newton"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 9,
+    "category": "General Knowledge",
+    "question": "Which ocean is the largest?",
+    "options": ["Atlantic", "Indian", "Arctic", "Pacific"],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": 10,
+    "category": "General Knowledge",
+    "question": "How many continents are there?",
+    "options": ["5", "6", "7", "8"],
+    "correctAnswerIndex": 2
+  },
+
+  {
+    "id": 11,
+    "category": "JavaScript",
+    "question": "Which keyword is used to declare a variable?",
+    "options": ["int", "string", "var", "define"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 12,
+    "category": "JavaScript",
+    "question": "Which keyword declares a constant?",
+    "options": ["let", "var", "const", "static"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 13,
+    "category": "JavaScript",
+    "question": "What does `typeof []` return?",
+    "options": ["array", "object", "list", "undefined"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 14,
+    "category": "JavaScript",
+    "question": "Which method converts JSON to an object?",
+    "options": [
+      "JSON.stringify()",
+      "JSON.parse()",
+      "JSON.convert()",
+      "JSON.decode()"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 15,
+    "category": "JavaScript",
+    "question": "What is the result of `2 + '2'`?",
+    "options": ["4", "22", "NaN", "Error"],
+    "correctAnswerIndex": 1
+  },
+
+  {
+    "id": 16,
+    "category": "Games",
+    "question": "Which game uses the Battle Royale format?",
+    "options": ["CS:GO", "Fortnite", "Dota 2", "Chess"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 17,
+    "category": "Games",
+    "question": "Which company developed GTA V?",
+    "options": ["Ubisoft", "Rockstar Games", "EA", "Bethesda"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 18,
+    "category": "Games",
+    "question": "Which console is made by Microsoft?",
+    "options": ["PlayStation", "Xbox", "Switch", "PS Vita"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 19,
+    "category": "Games",
+    "question": "Which game features the character Kratos?",
+    "options": ["Assassin's Creed", "God of War", "Dark Souls", "Skyrim"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 20,
+    "category": "Games",
+    "question": "Which game is about catching Pokémon?",
+    "options": ["Digimon", "Pokemon Go", "Monster Hunter", "Zelda"],
+    "correctAnswerIndex": 1
+  },
+
+  {
+    "id": 21,
+    "category": "General Knowledge",
+    "question": "Which country is known as the Land of the Rising Sun?",
+    "options": ["China", "Japan", "Korea", "Thailand"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 22,
+    "category": "General Knowledge",
+    "question": "What is the national animal of India?",
+    "options": ["Lion", "Tiger", "Elephant", "Leopard"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 23,
+    "category": "General Knowledge",
+    "question": "Which gas do plants absorb?",
+    "options": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 24,
+    "category": "General Knowledge",
+    "question": "Which is the smallest prime number?",
+    "options": ["0", "1", "2", "3"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 25,
+    "category": "General Knowledge",
+    "question": "Which instrument measures temperature?",
+    "options": ["Barometer", "Thermometer", "Hygrometer", "Altimeter"],
+    "correctAnswerIndex": 1
+  },
+
+  {
+    "id": 26,
+    "category": "JavaScript",
+    "question": "Which symbol is used for single-line comments?",
+    "options": ["<!-- -->", "#", "//", "/* */"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 27,
+    "category": "JavaScript",
+    "question": "Which function runs after a delay?",
+    "options": ["setInterval", "setTimeout", "delay()", "wait()"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 28,
+    "category": "JavaScript",
+    "question": "Which array method adds an item at the end?",
+    "options": ["push()", "pop()", "shift()", "unshift()"],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": 29,
+    "category": "JavaScript",
+    "question": "What does `===` mean?",
+    "options": ["Equal value", "Equal type", "Strict equality", "Assignment"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 30,
+    "category": "JavaScript",
+    "question": "Which keyword is used to create a class?",
+    "options": ["function", "object", "class", "prototype"],
+    "correctAnswerIndex": 2
+  },
+
+  {
+    "id": 31,
+    "category": "Games",
+    "question": "Which game uses creepers?",
+    "options": ["Terraria", "Minecraft", "Roblox", "Ark"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 32,
+    "category": "Games",
+    "question": "Which game is football-based?",
+    "options": ["NBA 2K", "FIFA", "Madden", "Cricket 07"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 33,
+    "category": "General Knowledge",
+    "question": "Which metal is liquid at room temperature?",
+    "options": ["Iron", "Mercury", "Silver", "Aluminum"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 34,
+    "category": "General Knowledge",
+    "question": "Which language has the most native speakers?",
+    "options": ["English", "Spanish", "Mandarin", "Hindi"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 35,
+    "category": "JavaScript",
+    "question": "What does NaN stand for?",
+    "options": [
+      "Not a Name",
+      "Not a Number",
+      "No assigned Number",
+      "Null and Number"
+    ],
+    "correctAnswerIndex": 1
+  },
+
+  {
+    "id": 36,
+    "category": "JavaScript",
+    "question": "Which loop runs at least once?",
+    "options": ["for", "while", "do...while", "foreach"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 37,
+    "category": "General Knowledge",
+    "question": "Who is known as the Father of the Nation (India)?",
+    "options": [
+      "Jawaharlal Nehru",
+      "Subhash Chandra Bose",
+      "Mahatma Gandhi",
+      "Ambedkar"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 38,
+    "category": "Games",
+    "question": "Which game is a first-person shooter?",
+    "options": ["CS:GO", "Dota 2", "Clash Royale", "Among Us"],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": 39,
+    "category": "JavaScript",
+    "question": "Which keyword stops a loop?",
+    "options": ["stop", "exit", "break", "return"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 40,
+    "category": "General Knowledge",
+    "question": "Which country hosted the 2024 Olympics?",
+    "options": ["Japan", "France", "USA", "China"],
+    "correctAnswerIndex": 1
+  },
+
+  {
+    "id": 41,
+    "category": "JavaScript",
+    "question": "Which method removes last array element?",
+    "options": ["pop()", "push()", "shift()", "splice()"],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": 42,
+    "category": "Games",
+    "question": "Which game features battle buses?",
+    "options": ["PUBG", "Apex Legends", "Fortnite", "Valorant"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 43,
+    "category": "General Knowledge",
+    "question": "What is H2O?",
+    "options": ["Hydrogen", "Oxygen", "Water", "Salt"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 44,
+    "category": "JavaScript",
+    "question": "Which keyword is used to export modules?",
+    "options": ["send", "export", "share", "module"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 45,
+    "category": "Games",
+    "question": "Which game is about survival on an island?",
+    "options": ["Rust", "Valorant", "Overwatch", "FIFA"],
+    "correctAnswerIndex": 0
+  },
+
+  {
+    "id": 46,
+    "category": "General Knowledge",
+    "question": "Which day is celebrated as World Environment Day?",
+    "options": ["June 5", "April 22", "May 1", "March 8"],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": 47,
+    "category": "JavaScript",
+    "question": "Which method joins array elements?",
+    "options": ["join()", "merge()", "combine()", "concat()"],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": 48,
+    "category": "Games",
+    "question": "Which game features agents and abilities?",
+    "options": ["CS:GO", "Valorant", "PUBG", "FIFA"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": 49,
+    "category": "General Knowledge",
+    "question": "Which organ pumps blood?",
+    "options": ["Brain", "Lungs", "Heart", "Kidney"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": 50,
+    "category": "JavaScript",
+    "question": "Which keyword handles errors?",
+    "options": ["catch", "error", "throw", "handle"],
+    "correctAnswerIndex": 0
+  }
+]

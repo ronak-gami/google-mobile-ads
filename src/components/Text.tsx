@@ -11,7 +11,7 @@ interface CustomTextProps extends TextProps {
 
 const Text: React.FC<CustomTextProps> = ({
   children,
-  color = COLORS.text,
+  color = COLORS.white,
   size = 16,
   bold = false,
   style,

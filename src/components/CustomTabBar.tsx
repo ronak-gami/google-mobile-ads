@@ -1,70 +1,71 @@
-import React, { useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import React, { useReducer } from 'react';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  LayoutChangeEvent,
+} from 'react-native';
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
-  withSpring,
-  interpolate,
-  Extrapolate,
-  SharedValue,
+  withTiming,
+  useDerivedValue,
 } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Path } from 'react-native-svg';
 import * as Icons from 'react-native-heroicons/solid';
 import { COLORS } from '../utils/colors';
-import { width } from '../utils/helper';
 
-const TAB_WIDTH = (width - 20) / 4;
+const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
 interface TabButtonProps {
   route: any;
-  index: number;
-  animatedIndex: SharedValue<number>;
-  navigation: any;
-  descriptors: any;
-  isFocused: boolean;
+  active: boolean;
+  onLayout: (e: LayoutChangeEvent) => void;
+  onPress: () => void;
   getIcon: (routeName: string, isFocused: boolean) => React.JSX.Element | null;
 }
 
 const TabButton: React.FC<TabButtonProps> = ({
   route,
-  index,
-  animatedIndex,
-  navigation,
-  isFocused,
+  active,
+  onLayout,
+  onPress,
   getIcon,
 }) => {
-  const onPress = () => {
-    const event = navigation.emit({
-      type: 'tabPress',
-      target: route.key,
-      preventDefault: false,
-    });
-
-    if (!isFocused && !event.defaultPrevented) {
-      navigation.navigate(route.name);
-    }
-  };
-
-  const scaleAnimatedStyle = useAnimatedStyle(() => {
-    const scale = interpolate(
-      animatedIndex.value,
-      [index - 1, index, index + 1],
-      [0.8, 1.1, 0.8],
-      Extrapolate.CLAMP,
-    );
-
+  const animatedComponentCircleStyles = useAnimatedStyle(() => {
     return {
-      transform: [{ scale }],
+      transform: [
+        {
+          scale: withTiming(active ? 1 : 0, { duration: 250 }),
+        },
+      ],
+    };
+  });
+
+  const animatedIconContainerStyles = useAnimatedStyle(() => {
+    return {
+      opacity: withTiming(active ? 1 : 0.5, { duration: 250 }),
     };
   });
 
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={styles.tabButton}
+      onLayout={onLayout}
+      style={styles.component}
       activeOpacity={0.8}
     >
-      <Animated.View style={scaleAnimatedStyle}>
-        {getIcon(route.name, isFocused)}
+      <Animated.View
+        style={[styles.componentCircle, animatedComponentCircleStyles]}
+      />
+      <Animated.View
+        style={[
+          styles.iconContainer,
+          animatedIconContainerStyles,
+          active && { top: 0 },
+        ]}
+      >
+        {getIcon(route.name, active)}
       </Animated.View>
     </TouchableOpacity>
   );
@@ -76,24 +77,34 @@ interface CustomTabBarProps {
   navigation: any;
 }
 
-const CustomTabBar: React.FC<CustomTabBarProps> = ({
-  state,
-  descriptors,
-  navigation,
-}) => {
-  const animatedIndex = useSharedValue(0);
+const CustomTabBar: React.FC<CustomTabBarProps> = ({ state, navigation }) => {
+  const { bottom } = useSafeAreaInsets();
+  const activeIndex = state.index;
 
-  useEffect(() => {
-    animatedIndex.value = withSpring(state.index, {
-      damping: 15,
-      mass: 1,
-      overshootClamping: false,
-    });
-  }, [state.index, animatedIndex]);
+  const reducer = (state: any, action: { x: number; index: number }) => {
+    return [...state, { x: action.x, index: action.index }];
+  };
+
+  const [layout, dispatch] = useReducer(reducer, []);
+
+  const handleLayout = (event: LayoutChangeEvent, index: number) => {
+    dispatch({ x: event.nativeEvent.layout.x, index });
+  };
+
+  const xOffset = useDerivedValue(() => {
+    if (layout.length !== state.routes.length) return 0;
+    return [...layout].find(({ index }) => index === activeIndex)!.x - 25;
+  }, [activeIndex, layout]);
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: withTiming(xOffset.value, { duration: 250 }) }],
+    };
+  });
 
   const getIcon = (routeName: string, isFocused: boolean) => {
-    const iconSize = 24;
-    const iconColor = isFocused ? COLORS.text : COLORS.green[500];
+    const iconSize = 28;
+    const iconColor = isFocused ? COLORS.white : COLORS.secondary;
 
     const iconProps = { size: iconSize, color: iconColor };
 
@@ -111,70 +122,80 @@ const CustomTabBar: React.FC<CustomTabBarProps> = ({
     }
   };
 
-  const indicatorAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateX: interpolate(
-            animatedIndex.value,
-            [0, 1, 2, 3],
-            [0, TAB_WIDTH, TAB_WIDTH * 2, TAB_WIDTH * 3],
-            Extrapolate.CLAMP,
-          ),
-        },
-      ],
-    };
-  });
-
   return (
-    <View style={styles.tabBarContainer}>
-      <View style={styles.tabBarBackground}>
-        <Animated.View
-          style={[styles.activeIndicator, indicatorAnimatedStyle]}
+    <View style={[styles.tabBar, { paddingBottom: bottom }]}>
+      <AnimatedSvg
+        width={110}
+        height={60}
+        viewBox="0 0 110 60"
+        style={[styles.activeBackground, animatedStyles]}
+      >
+        <Path
+          fill={COLORS.dark[900]}
+          d="M20 0H0c11.046 0 20 8.953 20 20v5c0 19.33 15.67 35 35 35s35-15.67 35-35v-5c0-11.045 8.954-20 20-20H20z"
         />
+      </AnimatedSvg>
 
-        {state.routes.map((route: any, index: number) => (
-          <TabButton
-            key={route.key}
-            route={route}
-            index={index}
-            animatedIndex={animatedIndex}
-            navigation={navigation}
-            descriptors={descriptors}
-            isFocused={state.index === index}
-            getIcon={getIcon}
-          />
-        ))}
+      <View style={styles.tabBarContainer}>
+        {state.routes.map((route: any, index: number) => {
+          const active = index === activeIndex;
+
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              preventDefault: false,
+            });
+
+            if (!active && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
+          };
+
+          return (
+            <TabButton
+              key={route.key}
+              route={route}
+              active={active}
+              onLayout={e => handleLayout(e, index)}
+              onPress={onPress}
+              getIcon={getIcon}
+            />
+          );
+        })}
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  tabBarContainer: {
-    paddingBottom: Platform.OS === 'ios' ? 20 : 10,
-    paddingHorizontal: 10,
-    backgroundColor: COLORS.dark[900],
-  },
-  tabBarBackground: {
-    flexDirection: 'row',
-    backgroundColor: COLORS.dark[800],
-    borderRadius: 30,
-    overflow: 'hidden',
+  tabBar: {
+    backgroundColor: COLORS.white,
     height: 60,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.border,
   },
-  activeIndicator: {
+  activeBackground: {
     position: 'absolute',
-    width: TAB_WIDTH,
-    height: 60,
-    backgroundColor: COLORS.green[600],
-    borderRadius: 30,
   },
-  tabButton: {
+  tabBarContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  component: {
+    height: 60,
+    width: 60,
+    marginTop: -5,
+  },
+  componentCircle: {
     flex: 1,
+    borderRadius: 30,
+    backgroundColor: COLORS.accent,
+  },
+  iconContainer: {
+    position: 'absolute',
+    top: 10,
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
   },

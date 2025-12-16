@@ -3,6 +3,47 @@ import { COLORS } from '../../utils/colors';
 
 export const useStyle = () => {
   return StyleSheet.create({
+    startContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '88%',
+      alignSelf: 'center',
+      paddingBottom: 60,
+    },
+    welcomeTitle: {
+      marginBottom: 16,
+      textAlign: 'center',
+    },
+    welcomeSubtitle: {
+      marginBottom: 40,
+      textAlign: 'center',
+      opacity: 0.8,
+    },
+    infoCard: {
+      backgroundColor: COLORS.dark[800],
+      padding: 24,
+      borderRadius: 16,
+      marginBottom: 40,
+      width: '100%',
+      borderWidth: 1,
+      borderColor: COLORS.green[400],
+      gap: 12,
+    },
+    infoText: {
+      lineHeight: 24,
+    },
+    startButton: {
+      backgroundColor: COLORS.green[400],
+      paddingVertical: 20,
+      paddingHorizontal: 60,
+      borderRadius: 16,
+      shadowColor: COLORS.green[400],
+      shadowOffset: { width: 0, height: 6 },
+      shadowOpacity: 0.4,
+      shadowRadius: 12,
+      elevation: 8,
+    },
     contentContainer: {
       width: '88%',
       alignSelf: 'center',
@@ -28,7 +69,7 @@ export const useStyle = () => {
       marginBottom: 24,
       borderLeftWidth: 4,
       borderLeftColor: COLORS.green[400],
-      shadowColor: '#000',
+      shadowColor: COLORS.shadow,
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.3,
       shadowRadius: 4,
@@ -49,13 +90,13 @@ export const useStyle = () => {
       borderColor: COLORS.dark[700],
     },
     correctOption: {
-      backgroundColor: '#1a4d2e',
-      borderColor: '#22c55e',
+      backgroundColor: COLORS.trueOptionBGColor,
+      borderColor: COLORS.trueOptionBorderColor,
       borderWidth: 2,
     },
     wrongOption: {
-      backgroundColor: '#4d1a1a',
-      borderColor: '#ef4444',
+      backgroundColor: COLORS.falseOptionBGColor,
+      borderColor: COLORS.falseOptionBorderColor,
       borderWidth: 2,
     },
     optionContent: {
@@ -134,6 +175,10 @@ export const useStyle = () => {
       shadowOpacity: 0.3,
       shadowRadius: 8,
       elevation: 6,
+    },
+    bannerContainer: {
+      alignItems: 'center',
+      marginVertical: 10,
     },
   });
 };

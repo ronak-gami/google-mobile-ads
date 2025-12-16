@@ -10,7 +10,7 @@ interface ContainerProps {
 
 const Container: React.FC<ContainerProps> = ({
   children,
-  bgColor = COLORS.dark[900],
+  bgColor = COLORS.background,
   style,
 }) => {
   return (
@@ -19,9 +19,6 @@ const Container: React.FC<ContainerProps> = ({
         {
           flex: 1,
           backgroundColor: bgColor,
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: 20,
         },
         style,
       ]}

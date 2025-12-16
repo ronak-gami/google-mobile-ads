@@ -8,8 +8,9 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "release-build": "cd android && ./gradlew assembleRelease && cd ..",
-    "gradlewClean": "cd android && ./gradlew clean && ./gradlew && cd .."
+    "releaseBuild": "cd android && ./gradlew assembleRelease && cd ..",
+    "gradlewClean": "cd android && ./gradlew clean && ./gradlew && cd ..",
+    "signinReport": "cd android && ./gradlew signingReport && cd .."
   },
   "dependencies": {
     "@react-native/new-app-screen": "0.81.5",

@@ -4,7 +4,6 @@ import {
   InterstitialAd,
   RewardedAd,
   BannerAd,
-  TestIds,
   AdEventType,
   RewardedAdEventType,
   BannerAdSize,
@@ -14,6 +13,7 @@ import { COLORS } from '../../utils/colors';
 import { useStyle } from './style';
 import quizData from '../../../quiz.json';
 import Container from '../../components/Container';
+import { AD_UNITS } from '../../utils/adUnits';
 
 interface Question {
   id: number;
@@ -43,7 +43,9 @@ const Tab1Screen = () => {
   }, []);
 
   const loadRewardedAd = () => {
-    const rewardedAd = RewardedAd.createForAdRequest(TestIds.REWARDED);
+    const rewardedAd = RewardedAd.createForAdRequest(AD_UNITS.REWARDED, {
+      keywords: ['fashion', 'clothing'],
+    });
 
     rewardedAd.addAdEventListener(RewardedAdEventType.LOADED, () => {
       console.log('Rewarded Ad loaded');
@@ -68,13 +70,12 @@ const Tab1Screen = () => {
   };
 
   const loadInterstitialAd = () => {
-    const adUnitId = __DEV__
-      ? TestIds.INTERSTITIAL
-      : 'ca-app-pub-9139685486639860/3771024277';
-
-    const interstitialAd = InterstitialAd.createForAdRequest(adUnitId, {
-      keywords: ['fashion', 'clothing'],
-    });
+    const interstitialAd = InterstitialAd.createForAdRequest(
+      AD_UNITS.INTERSTITIAL,
+      {
+        keywords: ['fashion', 'clothing'],
+      },
+    );
 
     interstitialAd.addAdEventListener(AdEventType.LOADED, () => {
       console.log('Interstitial Ad loaded');
@@ -220,12 +221,7 @@ const Tab1Screen = () => {
         </View>
         <View style={styles.bannerContainer}>
           <BannerAd
-            unitId={
-              __DEV__
-                ? TestIds.BANNER
-                : 'ca-app-pub-9139685486639860/1427754352'
-            }
-            // unitId={TestIds.BANNER}
+            unitId={AD_UNITS.BANNER}
             size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
           />
         </View>
@@ -285,12 +281,7 @@ const Tab1Screen = () => {
         </View>
         <View style={styles.bannerContainer}>
           <BannerAd
-            unitId={
-              __DEV__
-                ? TestIds.BANNER
-                : 'ca-app-pub-9139685486639860/1427754352'
-            }
-            // unitId={TestIds.BANNER}
+            unitId={AD_UNITS.BANNER}
             size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
           />
         </View>
@@ -374,10 +365,7 @@ const Tab1Screen = () => {
       </ScrollView>
       <View style={styles.bannerContainer}>
         <BannerAd
-          unitId={
-            __DEV__ ? TestIds.BANNER : 'ca-app-pub-9139685486639860/1427754352'
-          }
-          // unitId={TestIds.BANNER}
+          unitId={AD_UNITS.BANNER}
           size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
         />
       </View>

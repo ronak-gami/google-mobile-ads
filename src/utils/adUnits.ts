@@ -19,22 +19,28 @@ const PRODUCTION_AD_UNITS = {
 // Use test ads in __DEV__ mode, real ads in production
 const isTestMode = __DEV__;
 
+// export const AD_UNITS = {
+//   BANNER: isTestMode
+//     ? TestIds.BANNER
+//     : Platform.OS === 'ios'
+//     ? PRODUCTION_AD_UNITS.ios.banner
+//     : PRODUCTION_AD_UNITS.android.banner,
+
+//   INTERSTITIAL: isTestMode
+//     ? TestIds.INTERSTITIAL
+//     : Platform.OS === 'ios'
+//     ? PRODUCTION_AD_UNITS.ios.interstitial
+//     : PRODUCTION_AD_UNITS.android.interstitial,
+
+//   REWARDED: isTestMode
+//     ? TestIds.REWARDED
+//     : Platform.OS === 'ios'
+//     ? PRODUCTION_AD_UNITS.ios.rewarded
+//     : PRODUCTION_AD_UNITS.android.rewarded,
+// };
+
 export const AD_UNITS = {
-  BANNER: isTestMode
-    ? TestIds.BANNER
-    : Platform.OS === 'ios'
-    ? PRODUCTION_AD_UNITS.ios.banner
-    : PRODUCTION_AD_UNITS.android.banner,
-
-  INTERSTITIAL: isTestMode
-    ? TestIds.INTERSTITIAL
-    : Platform.OS === 'ios'
-    ? PRODUCTION_AD_UNITS.ios.interstitial
-    : PRODUCTION_AD_UNITS.android.interstitial,
-
-  REWARDED: isTestMode
-    ? TestIds.REWARDED
-    : Platform.OS === 'ios'
-    ? PRODUCTION_AD_UNITS.ios.rewarded
-    : PRODUCTION_AD_UNITS.android.rewarded,
+  BANNER: TestIds.BANNER,
+  INTERSTITIAL: TestIds.INTERSTITIAL,
+  REWARDED: TestIds.REWARDED,
 };

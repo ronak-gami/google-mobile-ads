@@ -1,23 +1,10 @@
 import { AppRegistry } from 'react-native';
-import App from './App';
+
 import { name as appName } from './app.json';
-import mobileAds from 'react-native-google-mobile-ads';
+import App from './src/App';
 
-mobileAds()
-  .setRequestConfiguration({
-    testDeviceIdentifiers: ['R9ZT20CC7XH', 'EMULATOR'],
-  })
-  .then(() => {
-    console.log('Ad request configuration set');
-  });
-
-mobileAds()
-  .initialize()
-  .then(adapterStatuses => {
-    console.log('Google Mobile Ads initialized:', adapterStatuses);
-  })
-  .catch(error => {
-    console.error('Failed to initialize Google Mobile Ads:', error);
-  });
+// if (__DEV__) {
+//   void import('@/reactotron.config');
+// }
 
 AppRegistry.registerComponent(appName, () => App);

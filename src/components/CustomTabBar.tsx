@@ -73,7 +73,6 @@ const TabButton: React.FC<TabButtonProps> = ({
 
 interface CustomTabBarProps {
   state: any;
-  descriptors: any;
   navigation: any;
 }
 

@@ -1,18 +1,75 @@
 import React from 'react';
-import Text from '../../components/Text';
-import { COLORS } from '../../utils/colors';
-import { useStyle } from './style';
+import { LayoutChangeEvent, StyleSheet, View } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withDecay,
+} from 'react-native-reanimated';
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
 import Container from '../../components/Container';
 
-const Tab2Screen = () => {
-  const styles = useStyle();
+const SIZE = 120;
+const BOUNDARY_OFFSET = 50;
+
+export default function App() {
+  const offset = useSharedValue<number>(0);
+  const width = useSharedValue<number>(0);
+
+  const onLayout = (event: LayoutChangeEvent) => {
+    width.value = event.nativeEvent.layout.width;
+  };
+
+  const pan = Gesture.Pan()
+    .onChange(event => {
+      // highlight-next-line
+      offset.value += event.changeX;
+    })
+    .onFinalize(event => {
+      // highlight-start
+      offset.value = withDecay({
+        velocity: event.velocityX,
+        rubberBandEffect: true,
+        clamp: [
+          -(width.value / 2) + SIZE / 2 + BOUNDARY_OFFSET,
+          width.value / 2 - SIZE / 2 - BOUNDARY_OFFSET,
+        ],
+      });
+      // highlight-end
+    });
+
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [{ translateX: offset.value }],
+  }));
+
   return (
-    <Container>
-      <Text size={24} bold color={COLORS.green[500]}>
-        Tab-2
-      </Text>
+    <Container style={{ justifyContent: 'center', alignItems: 'center' }}>
+      <View onLayout={onLayout} style={styles.wrapper}>
+        <GestureDetector gesture={pan}>
+          <Animated.View style={[styles.box, animatedStyles]} />
+        </GestureDetector>
+      </View>
     </Container>
   );
-};
+}
 
-export default Tab2Screen;
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  box: {
+    height: SIZE,
+    width: SIZE,
+    backgroundColor: '#b58df1',
+    borderRadius: 20,
+    cursor: 'grab',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

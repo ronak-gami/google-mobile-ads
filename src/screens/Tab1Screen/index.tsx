@@ -14,6 +14,7 @@ import { useStyle } from './style';
 import quizData from '../../../quiz.json';
 import Container from '../../components/Container';
 import { AD_UNITS } from '../../utils/adUnits';
+import { Button } from '../../components/Button';
 
 interface Question {
   id: number;
@@ -72,9 +73,7 @@ const Tab1Screen = () => {
   const loadInterstitialAd = () => {
     const interstitialAd = InterstitialAd.createForAdRequest(
       AD_UNITS.INTERSTITIAL,
-      {
-        keywords: ['fashion', 'clothing'],
-      },
+      { keywords: ['fashion', 'clothing'] },
     );
 
     interstitialAd.addAdEventListener(AdEventType.LOADED, () => {
@@ -209,15 +208,7 @@ const Tab1Screen = () => {
             </Text>
           </View>
 
-          <TouchableOpacity
-            style={styles.startButton}
-            onPress={handleStartQuiz}
-            activeOpacity={0.8}
-          >
-            <Text size={20} bold color={COLORS.dark[900]}>
-              Start Quiz
-            </Text>
-          </TouchableOpacity>
+          <Button title="Start Quiz" onPress={handleStartQuiz} />
         </View>
         <View style={styles.bannerContainer}>
           <BannerAd
@@ -269,15 +260,7 @@ const Tab1Screen = () => {
             </Text>
           </View>
 
-          <TouchableOpacity
-            style={styles.resetButton}
-            onPress={handleReset}
-            activeOpacity={0.8}
-          >
-            <Text size={18} bold color={COLORS.dark[900]}>
-              Start New Quiz
-            </Text>
-          </TouchableOpacity>
+          <Button title="Start New Quiz" onPress={handleReset} />
         </View>
         <View style={styles.bannerContainer}>
           <BannerAd
@@ -349,17 +332,14 @@ const Tab1Screen = () => {
           </View>
 
           {isAnswered && (
-            <TouchableOpacity
-              style={styles.nextButton}
-              onPress={handleNext}
-              activeOpacity={0.8}
-            >
-              <Text size={18} bold color={COLORS.dark[900]}>
-                {currentQuestionIndex < TOTAL_QUESTIONS - 1
+            <Button
+              title={
+                currentQuestionIndex < TOTAL_QUESTIONS - 1
                   ? 'Next Question'
-                  : 'View Results'}
-              </Text>
-            </TouchableOpacity>
+                  : 'View Results'
+              }
+              onPress={handleNext}
+            />
           )}
         </View>
       </ScrollView>

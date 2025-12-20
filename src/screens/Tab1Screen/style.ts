@@ -6,7 +6,6 @@ export const useStyle = () => {
     startContainer: {
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center',
       width: '88%',
       alignSelf: 'center',
       paddingBottom: 60,
@@ -132,7 +131,6 @@ export const useStyle = () => {
     resultContainer: {
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center',
       width: '85%',
       alignSelf: 'center',
     },

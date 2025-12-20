@@ -7,8 +7,13 @@ import Container from '../../components/Container';
 const Tab3Screen = () => {
   const styles = useStyle();
   return (
-    <Container bgColor={COLORS.dark[900]}>
-      <Text size={24} bold color={COLORS.green[400]}>
+    <Container style={{ justifyContent: 'center' }}>
+      <Text
+        style={{ textAlign: 'center' }}
+        size={24}
+        bold
+        color={COLORS.green[400]}
+      >
         Tab-3
       </Text>
     </Container>

@@ -4,14 +4,16 @@ import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import TabNavigator from './src/navigation/TabNavigator';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { COLORS } from './src/utils/colors';
 
 function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+        <StatusBar
+          backgroundColor={COLORS.background}
+          barStyle={'light-content'}
+        />
         <NavigationContainer>
           <TabNavigator />
         </NavigationContainer>

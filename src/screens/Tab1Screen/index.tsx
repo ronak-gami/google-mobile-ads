@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, TouchableOpacity, ScrollView } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Pressable } from 'react-native';
 import {
   InterstitialAd,
   RewardedAd,
@@ -15,6 +15,10 @@ import quizData from '../../../quiz.json';
 import Container from '../../components/Container';
 import { AD_UNITS } from '../../utils/adUnits';
 import { Button } from '../../components/Button';
+import * as Icons from 'react-native-heroicons/solid';
+import Tooltip from 'rn-tooltip';
+import { width } from '../../utils/helper';
+import { useAds } from '../../context/AdContext';
 
 interface Question {
   id: number;
@@ -28,6 +32,7 @@ const TOTAL_QUESTIONS = 10;
 
 const Tab1Screen = () => {
   const styles = useStyle();
+  const { isAdFree, setAdFreeUntil, adFreeTimeRemaining } = useAds();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -55,11 +60,17 @@ const Tab1Screen = () => {
 
     rewardedAd.addAdEventListener(RewardedAdEventType.EARNED_REWARD, reward => {
       console.log('User earned reward:', reward);
+      setAdFreeUntil(5); // Set ad-free for 5 minutes
     });
 
     rewardedAd.addAdEventListener(AdEventType.CLOSED, () => {
       console.log('Rewarded Ad closed');
-      resetQuiz();
+      if (!quizStarted) {
+        // If we were on the start screen, just reload the ad
+        loadRewardedAd();
+      } else {
+        resetQuiz();
+      }
     });
 
     rewardedAd.addAdEventListener(AdEventType.ERROR, error => {
@@ -95,6 +106,10 @@ const Tab1Screen = () => {
   };
 
   const handleStartQuiz = () => {
+    if (isAdFree) {
+      startQuiz();
+      return;
+    }
     if (interstitialAdRef.current) {
       interstitialAdRef.current.show();
     } else {
@@ -142,6 +157,10 @@ const Tab1Screen = () => {
   };
 
   const handleReset = () => {
+    if (isAdFree) {
+      resetQuiz();
+      return;
+    }
     if (rewardedAdRef.current) {
       rewardedAdRef.current.show();
     } else {
@@ -176,6 +195,57 @@ const Tab1Screen = () => {
   if (!quizStarted) {
     return (
       <Container>
+        <TouchableOpacity
+          style={styles.adView}
+          onPress={() => {
+            if (!isAdFree && rewardedAdRef.current) {
+              rewardedAdRef.current.show();
+            }
+          }}
+        >
+          <Text
+            style={{ textAlign: 'center', alignSelf: 'center' }}
+            size={14}
+            color={COLORS.dark[300]}
+          >
+            {isAdFree
+              ? `${Math.floor(adFreeTimeRemaining / 60)}:${(
+                  adFreeTimeRemaining % 60
+                )
+                  .toString()
+                  .padStart(2, '0')}`
+              : 'Watch Ad'}
+          </Text>
+          <Pressable
+            style={{ alignSelf: 'center' }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Tooltip
+              actionType="press"
+              height={'auto'}
+              width={width * 0.7}
+              withOverlay={false}
+              withPointer={true}
+              backgroundColor={COLORS.dark[700]}
+              popover={
+                <Text
+                  style={{ textAlign: 'center' }}
+                  color={COLORS.white}
+                  size={14}
+                >
+                  Watch the master ad to unlock 5 minutes of uninterrupted,
+                  ad-free usage.
+                </Text>
+              }
+            >
+              <Icons.InformationCircleIcon
+                size={20}
+                color={COLORS.dark[300]}
+                style={{ alignSelf: 'center' }}
+              />
+            </Tooltip>
+          </Pressable>
+        </TouchableOpacity>
         <View style={styles.startContainer}>
           <Text
             size={40}
@@ -210,12 +280,14 @@ const Tab1Screen = () => {
 
           <Button title="Start Quiz" onPress={handleStartQuiz} />
         </View>
-        <View style={styles.bannerContainer}>
-          <BannerAd
-            unitId={AD_UNITS.BANNER}
-            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-          />
-        </View>
+        {!isAdFree && (
+          <View style={styles.bannerContainer}>
+            <BannerAd
+              unitId={AD_UNITS.BANNER}
+              size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            />
+          </View>
+        )}
       </Container>
     );
   }
@@ -262,12 +334,14 @@ const Tab1Screen = () => {
 
           <Button title="Start New Quiz" onPress={handleReset} />
         </View>
-        <View style={styles.bannerContainer}>
-          <BannerAd
-            unitId={AD_UNITS.BANNER}
-            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-          />
-        </View>
+        {!isAdFree && (
+          <View style={styles.bannerContainer}>
+            <BannerAd
+              unitId={AD_UNITS.BANNER}
+              size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            />
+          </View>
+        )}
       </Container>
     );
   }
@@ -343,12 +417,14 @@ const Tab1Screen = () => {
           )}
         </View>
       </ScrollView>
-      <View style={styles.bannerContainer}>
-        <BannerAd
-          unitId={AD_UNITS.BANNER}
-          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        />
-      </View>
+      {!isAdFree && (
+        <View style={styles.bannerContainer}>
+          <BannerAd
+            unitId={AD_UNITS.BANNER}
+            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+          />
+        </View>
+      )}
     </Container>
   );
 };

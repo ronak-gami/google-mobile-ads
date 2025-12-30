@@ -65,17 +65,12 @@ const Tab1Screen = () => {
 
     rewardedAd.addAdEventListener(AdEventType.CLOSED, () => {
       console.log('Rewarded Ad closed');
-      if (!quizStarted) {
-        // If we were on the start screen, just reload the ad
-        loadRewardedAd();
-      } else {
-        resetQuiz();
-      }
+      loadRewardedAd();
     });
 
     rewardedAd.addAdEventListener(AdEventType.ERROR, error => {
       console.log('Rewarded Ad error:', error);
-      resetQuiz(); // Reset even if ad fails
+      loadRewardedAd();
     });
 
     rewardedAd.load();
@@ -95,11 +90,13 @@ const Tab1Screen = () => {
     interstitialAd.addAdEventListener(AdEventType.CLOSED, () => {
       console.log('Interstitial Ad closed');
       startQuiz();
+      loadInterstitialAd();
     });
 
     interstitialAd.addAdEventListener(AdEventType.ERROR, error => {
       console.log('Interstitial Ad error:', error);
       startQuiz(); // Start quiz even if ad fails
+      loadInterstitialAd();
     });
 
     interstitialAd.load();
@@ -158,20 +155,14 @@ const Tab1Screen = () => {
 
   const handleReset = () => {
     if (isAdFree) {
-      resetQuiz();
+      startQuiz();
       return;
     }
-    if (rewardedAdRef.current) {
-      rewardedAdRef.current.show();
+    if (interstitialAdRef.current) {
+      interstitialAdRef.current.show();
     } else {
-      resetQuiz();
+      startQuiz();
     }
-  };
-
-  const resetQuiz = () => {
-    setQuizStarted(false);
-    loadInterstitialAd();
-    loadRewardedAd();
   };
 
   const getOptionStyle = (index: number) => {
@@ -305,6 +296,57 @@ const Tab1Screen = () => {
   if (showResult) {
     return (
       <Container>
+        <TouchableOpacity
+          style={styles.adView}
+          onPress={() => {
+            if (!isAdFree && rewardedAdRef.current) {
+              rewardedAdRef.current.show();
+            }
+          }}
+        >
+          <Text
+            style={{ textAlign: 'center', alignSelf: 'center' }}
+            size={14}
+            color={COLORS.dark[300]}
+          >
+            {isAdFree
+              ? `${Math.floor(adFreeTimeRemaining / 60)}:${(
+                  adFreeTimeRemaining % 60
+                )
+                  .toString()
+                  .padStart(2, '0')}`
+              : 'Watch Ad'}
+          </Text>
+          <Pressable
+            style={{ alignSelf: 'center' }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Tooltip
+              actionType="press"
+              height={'auto'}
+              width={width * 0.7}
+              withOverlay={false}
+              withPointer={true}
+              backgroundColor={COLORS.dark[700]}
+              popover={
+                <Text
+                  style={{ textAlign: 'center' }}
+                  color={COLORS.white}
+                  size={14}
+                >
+                  Watch the master ad to unlock 5 minutes of uninterrupted,
+                  ad-free usage.
+                </Text>
+              }
+            >
+              <Icons.InformationCircleIcon
+                size={20}
+                color={COLORS.dark[300]}
+                style={{ alignSelf: 'center' }}
+              />
+            </Tooltip>
+          </Pressable>
+        </TouchableOpacity>
         <View style={styles.resultContainer}>
           <Text
             size={32}

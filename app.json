@@ -3,5 +3,20 @@
   "displayName": "google_mobile_ads",
   "react-native-google-mobile-ads": {
     "android_app_id": "ca-app-pub-9139685486639860~6856282808"
+  },
+  "expo": {
+    "name": "google_mobile_ads",
+    "slug": "ota-over-the-air-updates",
+    "version": "1.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "28553548-6cd1-497f-82df-db19b8be4cbd"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/28553548-6cd1-497f-82df-db19b8be4cbd"
+    },
+    "runtimeVersion": "1.0.0",
+    "owner": "ronak_gami122"
   }
 }

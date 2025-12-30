@@ -11,6 +11,11 @@
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="${usesCleartextTraffic}"
       android:supportsRtl="true">
+
+      <meta-data android:name="expo.modules.updates.EXPO_UPDATE_URL" android:value="https://u.expo.dev/28553548-6cd1-497f-82df-db19b8be4cbd" />
+      <meta-data android:name="expo.modules.updates.EXPO_RUNTIME_VERSION" android:value="1.0.0" />
+      <meta-data android:name="expo.modules.updates.EXPO_UPDATE_CHANNEL" android:value="preview" />
+
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

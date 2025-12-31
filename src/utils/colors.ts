@@ -1,7 +1,7 @@
 export const COLORS = Object.freeze({
   primary: '#1F2937',
   secondary: '#111827',
-  background: '#0F172A',
+  background: '#93C5FD',
   white: '#FFFFFF',
   black: '#000000',
   accent: '#10B981',

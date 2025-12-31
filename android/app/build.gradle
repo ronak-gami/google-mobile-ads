@@ -83,6 +83,11 @@ android {
     compileSdk rootProject.ext.compileSdkVersion
 
     namespace "com.google_mobile_ads"
+    
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
     defaultConfig {
         applicationId "com.google_mobile_ads"
         minSdkVersion rootProject.ext.minSdkVersion

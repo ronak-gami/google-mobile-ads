@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StatusBar, useColorScheme } from 'react-native';
+import { StatusBar, AppState, AppStateStatus } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import TabNavigator from './src/navigation/TabNavigator';
@@ -10,7 +10,22 @@ import { checkAndApplyUpdates } from './src/config/OTAConfig';
 
 function App() {
   useEffect(() => {
+    // 1. Check on App Launch
     checkAndApplyUpdates();
+
+    // 2. Check when App comes to Foreground (Resume)
+    const subscription = AppState.addEventListener(
+      'change',
+      (nextAppState: AppStateStatus) => {
+        if (nextAppState === 'active') {
+          checkAndApplyUpdates();
+        }
+      },
+    );
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   return (

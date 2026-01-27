@@ -207,35 +207,33 @@ const Tab1Screen = () => {
                   .padStart(2, '0')}`
               : 'Watch Ad'}
           </Text>
-          <Pressable
-            style={{ alignSelf: 'center' }}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          <Tooltip
+            actionType="press"
+            height={'auto'}
+            width={width * 0.7}
+            withOverlay={false}
+            withPointer={true}
+            backgroundColor={COLORS.dark[700]}
+            toggleWrapperProps={{
+              hitSlop: { top: 10, bottom: 10, left: 10, right: 10 },
+            }}
+            popover={
+              <Text
+                style={{ textAlign: 'center' }}
+                color={COLORS.white}
+                size={14}
+              >
+                Watch the master ad to unlock 5 minutes of uninterrupted,
+                ad-free usage.
+              </Text>
+            }
           >
-            <Tooltip
-              actionType="press"
-              height={'auto'}
-              width={width * 0.7}
-              withOverlay={false}
-              withPointer={true}
-              backgroundColor={COLORS.dark[700]}
-              popover={
-                <Text
-                  style={{ textAlign: 'center' }}
-                  color={COLORS.white}
-                  size={14}
-                >
-                  Watch the master ad to unlock 5 minutes of uninterrupted,
-                  ad-free usage.
-                </Text>
-              }
-            >
-              <Icons.InformationCircleIcon
-                size={20}
-                color={COLORS.dark[300]}
-                style={{ alignSelf: 'center' }}
-              />
-            </Tooltip>
-          </Pressable>
+            <Icons.InformationCircleIcon
+              size={20}
+              color={COLORS.dark[300]}
+              style={{ alignSelf: 'center' }}
+            />
+          </Tooltip>
         </TouchableOpacity>
         <View style={styles.startContainer}>
           <Text
@@ -317,35 +315,33 @@ const Tab1Screen = () => {
                   .padStart(2, '0')}`
               : 'Watch Ad'}
           </Text>
-          <Pressable
-            style={{ alignSelf: 'center' }}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          <Tooltip
+            actionType="press"
+            height={'auto'}
+            width={width * 0.7}
+            withOverlay={false}
+            withPointer={true}
+            backgroundColor={COLORS.dark[700]}
+            toggleWrapperProps={{
+              hitSlop: { top: 10, bottom: 10, left: 10, right: 10 },
+            }}
+            popover={
+              <Text
+                style={{ textAlign: 'center' }}
+                color={COLORS.white}
+                size={14}
+              >
+                Watch the master ad to unlock 5 minutes of uninterrupted,
+                ad-free usage.
+              </Text>
+            }
           >
-            <Tooltip
-              actionType="press"
-              height={'auto'}
-              width={width * 0.7}
-              withOverlay={false}
-              withPointer={true}
-              backgroundColor={COLORS.dark[700]}
-              popover={
-                <Text
-                  style={{ textAlign: 'center' }}
-                  color={COLORS.white}
-                  size={14}
-                >
-                  Watch the master ad to unlock 5 minutes of uninterrupted,
-                  ad-free usage.
-                </Text>
-              }
-            >
-              <Icons.InformationCircleIcon
-                size={20}
-                color={COLORS.dark[300]}
-                style={{ alignSelf: 'center' }}
-              />
-            </Tooltip>
-          </Pressable>
+            <Icons.InformationCircleIcon
+              size={20}
+              color={COLORS.dark[300]}
+              style={{ alignSelf: 'center' }}
+            />
+          </Tooltip>
         </TouchableOpacity>
         <View style={styles.resultContainer}>
           <Text

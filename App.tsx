@@ -7,12 +7,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { COLORS } from './src/utils/colors';
 import { AdProvider } from './src/context/AdContext';
 import { checkAndApplyUpdates } from './src/config/OTAConfig';
-import { DeviceCore, OrientationCore, NetworkCore } from 'react-native-system';
 
 function App() {
-  const type = NetworkCore.shouldReduceDataUsage();
-  console.log('type: ', type);
-
   useEffect(() => {
     // 1. Check on App Launch
     checkAndApplyUpdates();

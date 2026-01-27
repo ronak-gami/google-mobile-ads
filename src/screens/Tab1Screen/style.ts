@@ -13,10 +13,11 @@ export const useStyle = () => {
     adView: {
       gap: 6,
       flexDirection: 'row',
-      width: '32%',
+      minWidth: '32%',
       height: 40,
       alignSelf: 'flex-end',
       justifyContent: 'center',
+      alignItems: 'center',
       backgroundColor: COLORS.dark[500],
       borderRadius: 20,
       marginTop: 10,

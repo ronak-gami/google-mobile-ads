@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
-import { View, ViewStyle } from 'react-native';
+import { ViewStyle } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS } from '../utils/colors';
 
 interface ContainerProps {
@@ -14,7 +15,7 @@ const Container: React.FC<ContainerProps> = ({
   style,
 }) => {
   return (
-    <View
+    <SafeAreaView
       style={[
         {
           flex: 1,
@@ -24,7 +25,7 @@ const Container: React.FC<ContainerProps> = ({
       ]}
     >
       {children}
-    </View>
+    </SafeAreaView>
   );
 };
 

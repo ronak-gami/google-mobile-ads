@@ -8,7 +8,7 @@ export const useStyle = () => {
       justifyContent: 'center',
       width: '88%',
       alignSelf: 'center',
-      paddingBottom: 60,
+      paddingBottom: 120,
     },
     adView: {
       gap: 6,
@@ -147,6 +147,7 @@ export const useStyle = () => {
       justifyContent: 'center',
       width: '85%',
       alignSelf: 'center',
+      paddingBottom: 120,
     },
     resultTitle: {
       marginBottom: 40,
@@ -189,8 +190,12 @@ export const useStyle = () => {
       elevation: 6,
     },
     bannerContainer: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
       alignItems: 'center',
-      marginVertical: 10,
+      backgroundColor: COLORS.background,
     },
   });
 };

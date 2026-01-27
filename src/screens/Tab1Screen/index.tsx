@@ -395,7 +395,7 @@ const Tab1Screen = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ flex: 1, width: '100%' }}
-        contentContainerStyle={{ paddingBottom: 60 }}
+        contentContainerStyle={{ paddingBottom: 120 }}
       >
         <View style={styles.contentContainer}>
           <View style={styles.header}>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, TouchableOpacity, ScrollView, Pressable } from 'react-native';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { View, TouchableOpacity, ScrollView } from 'react-native';
 import {
   InterstitialAd,
   RewardedAd,
@@ -43,12 +43,12 @@ const Tab1Screen = () => {
   const interstitialAdRef = useRef<InterstitialAd | null>(null);
   const rewardedAdRef = useRef<RewardedAd | null>(null);
 
-  useEffect(() => {
-    loadInterstitialAd();
-    loadRewardedAd();
+  const startQuiz = useCallback(() => {
+    initializeQuiz();
+    setQuizStarted(true);
   }, []);
 
-  const loadRewardedAd = () => {
+  const loadRewardedAd = useCallback(() => {
     const rewardedAd = RewardedAd.createForAdRequest(AD_UNITS.REWARDED, {
       keywords: ['fashion', 'clothing'],
     });
@@ -74,9 +74,9 @@ const Tab1Screen = () => {
     });
 
     rewardedAd.load();
-  };
+  }, [setAdFreeUntil]);
 
-  const loadInterstitialAd = () => {
+  const loadInterstitialAd = useCallback(() => {
     const interstitialAd = InterstitialAd.createForAdRequest(
       AD_UNITS.INTERSTITIAL,
       { keywords: ['fashion', 'clothing'] },
@@ -100,7 +100,12 @@ const Tab1Screen = () => {
     });
 
     interstitialAd.load();
-  };
+  }, [startQuiz]);
+
+  useEffect(() => {
+    loadInterstitialAd();
+    loadRewardedAd();
+  }, [loadInterstitialAd, loadRewardedAd]);
 
   const handleStartQuiz = () => {
     if (isAdFree) {
@@ -112,11 +117,6 @@ const Tab1Screen = () => {
     } else {
       startQuiz();
     }
-  };
-
-  const startQuiz = () => {
-    initializeQuiz();
-    setQuizStarted(true);
   };
 
   const initializeQuiz = () => {

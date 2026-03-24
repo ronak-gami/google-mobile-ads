@@ -16,7 +16,7 @@ import Container from '../../components/Container';
 import { AD_UNITS } from '../../utils/adUnits';
 import { Button } from '../../components/Button';
 import * as Icons from 'react-native-heroicons/solid';
-import Tooltip from 'rn-tooltip';
+import Tooltip from 'react-native-easy-tooltip';
 import { width } from '../../utils/helper';
 import { useAds } from '../../context/AdContext';
 

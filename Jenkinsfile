@@ -79,7 +79,9 @@ pipeline {
                         return
                     }
 
-                    def credentialId = "google-mobile-ads-env-${envType}"
+                    // Credential ID must exactly match what's uploaded in Jenkins:
+                    // .env.local / .env.staging / .env.production
+                    def credentialId = ".env.${envType}"
                     echo "Injecting env config for '${envType}' using credential '${credentialId}'..."
 
                     // No try/catch here on purpose: if the matching credential is

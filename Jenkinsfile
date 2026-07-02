@@ -122,6 +122,7 @@ EOF
         }
         success {
             echo "Android staging build #${env.BUILD_NUMBER} completed successfully. The build is exported to: android/app/build/outputs/apk/release/app-release.apk"
+            sh 'cp android/app/build/outputs/apk/release/app-release.apk /Users/niravpatel/Downloads/app-release.apk'
         }
         failure {
             echo "Android staging build #${env.BUILD_NUMBER} failed. Check the console output for details."

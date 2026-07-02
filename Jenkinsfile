@@ -58,7 +58,7 @@ pipeline {
                     rm -rf package-lock.json node_modules
 
                     echo "=== Installing npm packages (resilient install) ==="
-                    npm install --legacy-peer-deps
+                    npm install --force
 
                     echo "=== Cleaning Android build ==="
                     cd android

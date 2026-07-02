@@ -3,7 +3,7 @@ pipeline {
     // Android SDK + Xcode/CocoaPods installed, rather than 'agent any'.
     // Add this label to your Mac node in Jenkins (Manage Nodes > your node > Labels),
     // or change the label below to match an existing one.
-    agent { label 'macos-mobile-builder' }
+    agent any
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
@@ -64,7 +64,7 @@ pipeline {
                     npm ci --legacy-peer-deps
 
                     echo "=== Cleaning Android build ==="
-                    npm run clean:android
+                    cd android && ./gradlew clean && cd ..
                 '''
             }
         }

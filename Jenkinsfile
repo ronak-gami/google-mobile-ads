@@ -31,7 +31,7 @@ pipeline {
         // VERIFY this path matches the JDK actually installed on your agent
         // (check with: /usr/libexec/java_home -V). This is a guess based on a
         // typical Homebrew install and MUST be confirmed before first run.
-        JAVA_HOME = "/opt/homebrew/opt/openjdk@17"
+        JAVA_HOME = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
 
         // VERIFY this nvm node path exists on the agent you land on.
         PATH = "${HOME}/.nvm/versions/node/v24.14.0/bin:/opt/homebrew/bin:/usr/local/bin:${JAVA_HOME}/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:/usr/bin:/bin:/usr/sbin:/sbin"

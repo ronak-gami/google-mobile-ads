@@ -60,8 +60,8 @@ pipeline {
                     node --version
                     npm --version
 
-                    echo "=== Installing npm packages (clean, reproducible install) ==="
-                    npm ci --legacy-peer-deps
+                    echo "=== Installing npm packages (resilient install) ==="
+                    npm install --legacy-peer-deps
 
                     echo "=== Cleaning Android build ==="
                     cd android && ./gradlew clean && cd ..

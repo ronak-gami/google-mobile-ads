@@ -104,10 +104,11 @@ EOF
                         sh '''
                             set -e
                             echo "=== Building Android APK ==="
-                            ./gradlew clean assembleRelease \
-                              -PMYAPP_UPLOAD_STORE_FILE=$KEYSTORE_FILE \
-                              -PversionCode=$APP_BUILD_NUMBER \
-                              --no-daemon
+                             ./gradlew clean assembleRelease \
+                               -PMYAPP_UPLOAD_STORE_FILE=$KEYSTORE_FILE \
+                               -PversionCode=$APP_BUILD_NUMBER \
+                               -PversionName="1.0.${APP_BUILD_NUMBER}" \
+                               --no-daemon
                         '''
                     }
                 }
@@ -120,13 +121,10 @@ EOF
             archiveArtifacts artifacts: 'android/app/build/outputs/apk/release/*.apk', allowEmptyArchive: true, fingerprint: true
         }
         success {
-            echo "Android staging build #${env.BUILD_NUMBER} completed successfully. APK is available in Jenkins artifacts."
+            echo "Android staging build #${env.BUILD_NUMBER} completed successfully. The build is exported to: android/app/build/outputs/apk/release/app-release.apk"
         }
         failure {
             echo "Android staging build #${env.BUILD_NUMBER} failed. Check the console output for details."
-        }
-        cleanup {
-            cleanWs()
         }
     }
 }

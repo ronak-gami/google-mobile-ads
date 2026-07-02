@@ -1,8 +1,4 @@
 pipeline {
-    // iOS builds require macOS, so pin this to a labeled macOS agent that has
-    // Android SDK + Xcode/CocoaPods installed, rather than 'agent any'.
-    // Add this label to your Mac node in Jenkins (Manage Nodes > your node > Labels),
-    // or change the label below to match an existing one.
     agent any
 
     options {
@@ -12,31 +8,23 @@ pipeline {
         timestamps()
     }
 
+    parameters {
+        choice(
+            name: 'BUILD_ENV',
+            choices: ['staging', 'local', 'production', 'none'],
+            description: 'Select the environment configuration to inject (.env file)'
+        )
+    }
+
     environment {
-        // NODE_ENV=production is required for RN/Metro to produce an optimized
-        // release build (strips dev warnings, enables prod code paths).
-        // APP_ENV distinguishes which backend/config to point at.
-        NODE_ENV = 'production'
-        APP_ENV  = 'staging'
-
-        // Only a keystore FILE credential exists in Jenkins right now.
-        // Store password / key alias / key password are therefore being read by
-        // Gradle from android/gradle.properties (or wherever your signingConfig
-        // points) — see the note on the build stage below about what that means.
-        ANDROID_KEYSTORE_FILE_ID = 'google-mobile-ads-keystore-file' // Secret file
-
         ANDROID_HOME     = "${HOME}/Library/Android/sdk"
         ANDROID_SDK_ROOT  = "${HOME}/Library/Android/sdk"
-
-        // VERIFY this path matches the JDK actually installed on your agent
-        // (check with: /usr/libexec/java_home -V). This is a guess based on a
-        // typical Homebrew install and MUST be confirmed before first run.
         JAVA_HOME = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
-
-        // VERIFY this nvm node path exists on the agent you land on.
         PATH = "${HOME}/.nvm/versions/node/v24.14.0/bin:/opt/homebrew/bin:/usr/local/bin:${JAVA_HOME}/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:/usr/bin:/bin:/usr/sbin:/sbin"
-
         LANG = 'en_US.UTF-8'
+
+        //Define the keystore name which uploaded on jenkins credential
+        ANDROID_KEYSTORE_FILE_ID = 'google-mobile-ads-keystore-file' // Secret file
     }
 
     stages {
@@ -51,7 +39,6 @@ pipeline {
                 checkout scm
             }
         }
-
         stage('Install Dependencies') {
             steps {
                 sh '''
@@ -60,24 +47,59 @@ pipeline {
                     node --version
                     npm --version
 
+                    echo "=== Removing old dependencies ==="
+                    rm -rf package-lock.json node_modules
+
                     echo "=== Installing npm packages (resilient install) ==="
                     npm install --legacy-peer-deps
 
                     echo "=== Cleaning Android build ==="
-                    cd android && ./gradlew clean && cd ..
+                    cd android && rm -rf build .cxx && ./gradlew && ./gradlew clean && cd ..
                 '''
             }
         }
 
-        stage('Inject Staging Config') {
+        stage('Inject Environment Config') {
             steps {
-                sh '''
-                    set -e
-                    cat > .env << EOF
-API_URL=https://api-staging.example.com
-APP_ENV=staging
-EOF
-                '''
+                script {
+                    def envType = ''
+                    
+                    // 1. Check if parameter is specified
+                    if (params.BUILD_ENV && params.BUILD_ENV != 'none') {
+                        envType = params.BUILD_ENV
+                        echo "Environment selected from build parameters: ${envType}"
+                    } 
+                    // 2. Fallback to Job Name suffix detection
+                    else {
+                        if (env.JOB_NAME.contains('local')) {
+                            envType = 'local'
+                        } else if (env.JOB_NAME.contains('production')) {
+                            envType = 'production'
+                        } else if (env.JOB_NAME.contains('staging')) {
+                            envType = 'staging'
+                        }
+                        if (envType != '') {
+                            echo "Environment detected from job name: ${envType}"
+                        }
+                    }
+                    
+                    if (envType != '') {
+                        //Before making build you need update credentail name 
+                        def credentialId = "google-mobile-ads-env-${envType}"
+                        echo "Attempting to inject env config for ${envType} using credential ${credentialId}..."
+                        try {
+                            withCredentials([file(credentialsId: credentialId, variable: 'ENV_FILE')]) {
+                                sh "cp \$ENV_FILE .env"
+                                sh "cp \$ENV_FILE .env.${envType}"
+                                echo "Successfully injected .env and .env.${envType} configurations."
+                            }
+                        } catch (Exception e) {
+                            echo "Warning: Environment config credential '${credentialId}' not found in Jenkins. Skipping env injection."
+                        }
+                    } else {
+                        echo "No environment configuration injected (selected 'none' and no environment suffix in job name)."
+                    }
+                }
             }
         }
 
@@ -89,12 +111,6 @@ EOF
             }
         }
 
-        // NOTE: only the keystore FILE is injected here. storePassword / keyAlias /
-        // keyPassword are NOT passed in — which means Gradle is picking them up from
-        // android/gradle.properties (or hardcoded in android/app/build.gradle).
-        // Practically that means those secrets live in plain text in your repo/agent.
-        // Functional, but not ideal. See the message below the file for how to close
-        // this gap later — it's just 3 more credentials + 3 more lines here.
         stage('Build Android Staging (APK)') {
             steps {
                 withCredentials([

@@ -8,22 +8,28 @@ pipeline {
         timestamps()
     }
 
+    // Defining this here (instead of only in the Jenkins UI) means the dropdown
+    // travels with the Jenkinsfile: any job/clone pointed at this file gets the
+    // same "which environment" prompt automatically, no manual per-job setup.
+    // NOTE: the very first build after this change won't show the prompt yet —
+    // Jenkins has to read this file once via SCM before it registers the
+    // parameter. From the 2nd build onward, "Build with Parameters" will show it.
     parameters {
         choice(
             name: 'BUILD_ENV',
             choices: ['staging', 'local', 'production', 'none'],
-            description: 'Select the environment configuration to inject (.env file)'
+            description: 'Select the environment configuration to inject (.env file). Choose "none" to build with no env file.'
         )
     }
 
     environment {
         ANDROID_HOME     = "${HOME}/Library/Android/sdk"
-        ANDROID_SDK_ROOT  = "${HOME}/Library/Android/sdk"
+        ANDROID_SDK_ROOT = "${HOME}/Library/Android/sdk"
         JAVA_HOME = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
         PATH = "${HOME}/.nvm/versions/node/v24.14.0/bin:/opt/homebrew/bin:/usr/local/bin:${JAVA_HOME}/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:/usr/bin:/bin:/usr/sbin:/sbin"
         LANG = 'en_US.UTF-8'
 
-        //Define the keystore name which uploaded on jenkins credential
+        // Keystore file credential uploaded in Jenkins
         ANDROID_KEYSTORE_FILE_ID = 'google-mobile-ads-keystore-file' // Secret file
     }
 
@@ -39,6 +45,7 @@ pipeline {
                 checkout scm
             }
         }
+
         stage('Install Dependencies') {
             steps {
                 sh '''
@@ -54,7 +61,10 @@ pipeline {
                     npm install --legacy-peer-deps
 
                     echo "=== Cleaning Android build ==="
-                    cd android && rm -rf build .cxx && ./gradlew && ./gradlew clean && cd ..
+                    cd android
+                    ./gradlew clean
+                    rm -rf build .cxx
+                    cd ..
                 '''
             }
         }
@@ -62,43 +72,27 @@ pipeline {
         stage('Inject Environment Config') {
             steps {
                 script {
-                    def envType = ''
-                    
-                    // 1. Check if parameter is specified
-                    if (params.BUILD_ENV && params.BUILD_ENV != 'none') {
-                        envType = params.BUILD_ENV
-                        echo "Environment selected from build parameters: ${envType}"
-                    } 
-                    // 2. Fallback to Job Name suffix detection
-                    else {
-                        if (env.JOB_NAME.contains('local')) {
-                            envType = 'local'
-                        } else if (env.JOB_NAME.contains('production')) {
-                            envType = 'production'
-                        } else if (env.JOB_NAME.contains('staging')) {
-                            envType = 'staging'
-                        }
-                        if (envType != '') {
-                            echo "Environment detected from job name: ${envType}"
-                        }
+                    def envType = params.BUILD_ENV
+
+                    if (!envType || envType == 'none') {
+                        echo "BUILD_ENV = 'none' — skipping .env injection."
+                        return
                     }
-                    
-                    if (envType != '') {
-                        //Before making build you need update credentail name 
-                        def credentialId = "google-mobile-ads-env-${envType}"
-                        echo "Attempting to inject env config for ${envType} using credential ${credentialId}..."
-                        try {
-                            withCredentials([file(credentialsId: credentialId, variable: 'ENV_FILE')]) {
-                                sh "cp \$ENV_FILE .env"
-                                sh "cp \$ENV_FILE .env.${envType}"
-                                echo "Successfully injected .env and .env.${envType} configurations."
-                            }
-                        } catch (Exception e) {
-                            echo "Warning: Environment config credential '${credentialId}' not found in Jenkins. Skipping env injection."
-                        }
-                    } else {
-                        echo "No environment configuration injected (selected 'none' and no environment suffix in job name)."
+
+                    def credentialId = "google-mobile-ads-env-${envType}"
+                    echo "Injecting env config for '${envType}' using credential '${credentialId}'..."
+
+                    // No try/catch here on purpose: if the matching credential is
+                    // missing, the build now FAILS instead of silently shipping an
+                    // app with no/stale env config. Shipping the wrong config quietly
+                    // is worse than a loud failure.
+                    withCredentials([file(credentialsId: credentialId, variable: 'ENV_FILE')]) {
+                        sh """
+                            cp \$ENV_FILE .env
+                            cp \$ENV_FILE .env.${envType}
+                        """
                     }
+                    echo "Injected .env and .env.${envType}"
                 }
             }
         }
@@ -111,7 +105,7 @@ pipeline {
             }
         }
 
-        stage('Build Android Staging (APK)') {
+        stage('Build Android APK') {
             steps {
                 withCredentials([
                     file(credentialsId: env.ANDROID_KEYSTORE_FILE_ID, variable: 'KEYSTORE_FILE')
@@ -119,12 +113,12 @@ pipeline {
                     dir('android') {
                         sh '''
                             set -e
-                            echo "=== Building Android APK ==="
-                             ./gradlew clean assembleRelease \
-                               -PMYAPP_UPLOAD_STORE_FILE=$KEYSTORE_FILE \
-                               -PversionCode=$APP_BUILD_NUMBER \
-                               -PversionName="1.0.${APP_BUILD_NUMBER}" \
-                               --no-daemon
+                            echo "=== Building Android APK ($BUILD_ENV) ==="
+                            ./gradlew clean assembleRelease \
+                              -PMYAPP_UPLOAD_STORE_FILE=$KEYSTORE_FILE \
+                              -PversionCode=$APP_BUILD_NUMBER \
+                              -PversionName="1.0.${APP_BUILD_NUMBER}" \
+                              --no-daemon
                         '''
                     }
                 }
@@ -137,11 +131,18 @@ pipeline {
             archiveArtifacts artifacts: 'android/app/build/outputs/apk/release/*.apk', allowEmptyArchive: true, fingerprint: true
         }
         success {
-            echo "Android staging build #${env.BUILD_NUMBER} completed successfully. The build is exported to: android/app/build/outputs/apk/release/app-release.apk"
-            sh 'cp android/app/build/outputs/apk/release/app-release.apk /Users/niravpatel/Downloads/app-release.apk'
+            echo "Android ${params.BUILD_ENV} build #${env.BUILD_NUMBER} completed successfully. APK: android/app/build/outputs/apk/release/app-release.apk"
+            // Convenience copy for your local Mac only. Only ever works if this
+            // build happens to land on niravpatel's machine — which isn't
+            // guaranteed on 'agent any'. Wrapped so it can't fail the build.
+            sh '''
+                if [ -d "/Users/niravpatel/Downloads" ]; then
+                    cp android/app/build/outputs/apk/release/app-release.apk /Users/niravpatel/Downloads/app-release.apk || true
+                fi
+            '''
         }
         failure {
-            echo "Android staging build #${env.BUILD_NUMBER} failed. Check the console output for details."
+            echo "Android ${params.BUILD_ENV} build #${env.BUILD_NUMBER} failed. Check the console output for details."
         }
     }
 }
